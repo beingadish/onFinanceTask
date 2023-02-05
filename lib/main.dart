@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:on_finance_task/model/data_model.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -16,6 +17,8 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  int chart = 0;
+  int save=0;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,13 +37,16 @@ class _MainAppState extends State<MainApp> {
           actions: [
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
-              child: Container(
-                padding: const EdgeInsets.all(8.0),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0xff16161C),
+              child: GestureDetector(
+                onTap: () => setState(() => save ==0 ? save = 1 : save = 0),
+                child: Container(
+                  padding: const EdgeInsets.all(8.0),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0xff16161C),
+                  ),
+                  child: save == 0 ? const Icon(Icons.bookmark_border_rounded) : const Icon(Icons.bookmark),
                 ),
-                child: const Icon(Icons.bookmark_border_rounded),
               ),
             )
           ],
@@ -54,7 +60,7 @@ class _MainAppState extends State<MainApp> {
               Builder(
                 builder: (context) {
                   return Stack(
-                    textDirection: TextDirection.ltr,
+                    // textDirection: TextDirection.ltr,
                     children: [
                       Container(
                         clipBehavior: Clip.antiAlias,
@@ -114,8 +120,7 @@ class _MainAppState extends State<MainApp> {
                                 Row(
                                   children: [
                                     const CircleAvatar(
-                                      foregroundImage: NetworkImage(
-                                          "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQsAgQtWc9HFEPOn1_zE_rkEfQsTHTUEXwsvgKtaN6-z05Yst51"),
+                                      foregroundImage: AssetImage("assets/images/polygon.png"),
                                       maxRadius: 30,
                                     ),
                                     const SizedBox(
@@ -201,15 +206,12 @@ class _MainAppState extends State<MainApp> {
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
-                                children: const [
-                                  Icon(
-                                    Icons.show_chart,
-                                    color: Color(0xff00EB7A),
-                                  ),
-                                  SizedBox(
+                                children: [
+                                  Image.asset("assets/images/up.png",scale: 4.0,),
+                                  const SizedBox(
                                     width: 5.0,
                                   ),
-                                  Text(
+                                  const Text(
                                     "2.75%",
                                     style: TextStyle(
                                       color: Color(0xff00EB7A),
@@ -259,6 +261,37 @@ class _MainAppState extends State<MainApp> {
                           ],
                         ),
                       ),
+                      Positioned(
+                        bottom: 0.0,
+                        width: MediaQuery.of(context).size.width,
+                        child: Align(
+                          child: IntrinsicHeight(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  child: const IntrinsicHeight(child: FloatingActionBar()),
+                                ),
+                                IntrinsicHeight(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      setState(() => chart == 0 ? (chart = 1) : chart = 0);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.black,
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    child: chart == 0 ? Image.asset("assets/images/candlebar.png",
+                                    scale: 3.0,) : Image.asset("assets/images/chart.png",scale: 3.0,),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   );
                 },
@@ -267,6 +300,76 @@ class _MainAppState extends State<MainApp> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+
+
+class FloatingActionBar extends StatefulWidget {
+  const FloatingActionBar({Key? key}) : super(key: key);
+
+  @override
+  State<FloatingActionBar> createState() => _FloatingActionBarState();
+}
+
+class _FloatingActionBarState extends State<FloatingActionBar> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingNavbar(
+      selectedBackgroundColor: const Color(0xff3353FA),
+      onTap: (int val) => setState(() => _index = val),
+      currentIndex: _index,
+      items: [
+        FloatingNavbarItem(
+          customWidget: Text(
+            "1H",
+            style: TextStyle(
+              color: _index == 0 ? Colors.white : const Color(0xff424242),
+              fontSize: 18
+            ),
+          ),
+        ),
+        FloatingNavbarItem(
+          customWidget: Text(
+            "1D",
+            style: TextStyle(
+              color: _index == 1 ? Colors.white : const Color(0xff424242),
+                fontSize: 18
+            ),
+          ),
+        ),
+        FloatingNavbarItem(
+          customWidget: Text(
+            "1W",
+            style: TextStyle(
+              color: _index == 2 ? Colors.white : const Color(0xff424242),
+                fontSize: 18
+            ),
+          ),
+        ),
+        FloatingNavbarItem(
+          customWidget: Text(
+            "1M",
+            style: TextStyle(
+              color: _index == 3 ? Colors.white : const Color(0xff424242),
+                fontSize: 18
+            ),
+          ),
+        ),
+        FloatingNavbarItem(
+          customWidget: Text(
+            "5Y",
+            style: TextStyle(
+              color: _index == 4 ? Colors.white : const Color(0xff424242),
+                fontSize: 18
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
