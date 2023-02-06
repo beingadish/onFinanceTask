@@ -39,6 +39,7 @@ dependencies:
   syncfusion_flutter_charts: ^20.4.48
   font_awesome_flutter: ^10.3.0
   floating_bottom_navigation_bar: ^1.5.2
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

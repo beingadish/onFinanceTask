@@ -1,9 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:on_finance_task/constants/stock_data.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:on_finance_task/model/data_model.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 void main() {
   runApp(const MainApp());
@@ -18,7 +19,8 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   int chart = 0;
-  int save=0;
+  int save = 0;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -38,14 +40,16 @@ class _MainAppState extends State<MainApp> {
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: GestureDetector(
-                onTap: () => setState(() => save ==0 ? save = 1 : save = 0),
+                onTap: () => setState(() => save == 0 ? save = 1 : save = 0),
                 child: Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                     color: Color(0xff16161C),
                   ),
-                  child: save == 0 ? const Icon(Icons.bookmark_border_rounded) : const Icon(Icons.bookmark),
+                  child: save == 0
+                      ? const Icon(Icons.bookmark_border_rounded)
+                      : const Icon(Icons.bookmark),
                 ),
               ),
             )
@@ -60,6 +64,7 @@ class _MainAppState extends State<MainApp> {
               Builder(
                 builder: (context) {
                   return Stack(
+                    clipBehavior: Clip.antiAlias,
                     // textDirection: TextDirection.ltr,
                     children: [
                       Container(
@@ -72,19 +77,92 @@ class _MainAppState extends State<MainApp> {
                           ),
                         ),
                         child: SfCartesianChart(
+                          // isTransposed: true,
+                          // enableSideBySideSeriesPlacement: false,
+                          plotAreaBorderWidth: 0,
+                          // plotAreaBorderColor: Colors.amber,
+                          enableAxisAnimation: true,
+
+                          legend: Legend(isVisible: true),
                           margin: const EdgeInsets.all(0),
+
+
                           primaryXAxis: DateTimeAxis(
-                            minimum: DateTime(2005),
-                            maximum: DateTime.now(),
-                          ),
-                          primaryYAxis: NumericAxis(
+                            // isVisible: false,
                             borderColor: Colors.amber,
-                            minimum: 20,
-                            maximum: 100,
+                            // plotOffset: 0,
+                            axisBorderType: AxisBorderType.withoutTopAndBottom,
+                            majorGridLines: const MajorGridLines(
+                              color: Colors.white12,
+                              width: 0.2,
+                            ),
+                            minorGridLines: const MinorGridLines(
+                              color: Colors.white,
+                              width: 0.1,
+                            ),
+                            labelPosition: ChartDataLabelPosition.inside,
+                            tickPosition: TickPosition.inside,
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            enableAutoIntervalOnZooming: true,
+                            minimum: DateTime(2004, 01, 01),
+                            maximum: DateTime(2010, 12, 31),
                           ),
+
+
+                          primaryYAxis: NumericAxis(
+                            // isVisible: false,
+                            autoScrollingMode: AutoScrollingMode.end,
+                            majorGridLines: const MajorGridLines(
+                              color: Colors.white12,
+                              width: 0.2,
+                            ),
+                            minorGridLines: const MinorGridLines(
+                              color: Colors.white,
+                              width: 0.1,
+                            ),
+                            labelPosition: ChartDataLabelPosition.inside,
+                            anchorRangeToVisiblePoints: false,
+                            tickPosition: TickPosition.inside,
+                            edgeLabelPlacement: EdgeLabelPlacement.shift,
+                            // borderColor: Colors.amber,
+                            enableAutoIntervalOnZooming: true,
+                            numberFormat: NumberFormat.currency(
+                              locale: "en_IND",
+                              symbol: "₹",
+                            ),
+                            minimum: 13,
+                            maximum: 25,
+                          ),
+
+
                           zoomPanBehavior:
                               ZoomPanBehavior(enablePinching: true),
-                          backgroundColor: const Color(0xff111115),
+                          backgroundColor: const Color(0xff111115).withAlpha(180),
+                          series: <ChartSeries>[
+                            chart == 1
+                                ? CandleSeries<StockData, dynamic>(
+                                    bearColor: Colors.red,
+                                    bullColor: Colors.green,
+                                    dataSource: chartData,
+                                    xValueMapper: (StockData stock, _) =>
+                                        stock.time,
+                                    lowValueMapper: (StockData stock, _) =>
+                                        stock.low,
+                                    highValueMapper: (StockData stock, _) =>
+                                        stock.high,
+                                    openValueMapper: (StockData stock, _) =>
+                                        stock.open,
+                                    closeValueMapper: (StockData stock, _) =>
+                                        stock.close)
+                                : SplineSeries<StockData, dynamic>(
+                              color: const Color(0xff00EB7A),
+                                    dataSource: chartData,
+                                    xValueMapper: (StockData stock, _) =>
+                                        stock.time,
+                                    yValueMapper: (StockData stock, _) =>
+                                        (stock.open + stock.close) / 2,
+                                  ),
+                          ],
                         ),
                       ),
                       Container(
@@ -120,7 +198,8 @@ class _MainAppState extends State<MainApp> {
                                 Row(
                                   children: [
                                     const CircleAvatar(
-                                      foregroundImage: AssetImage("assets/images/polygon.png"),
+                                      foregroundImage: AssetImage(
+                                          "assets/images/polygon.png"),
                                       maxRadius: 30,
                                     ),
                                     const SizedBox(
@@ -207,7 +286,10 @@ class _MainAppState extends State<MainApp> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Image.asset("assets/images/up.png",scale: 4.0,),
+                                  Image.asset(
+                                    "assets/images/up.png",
+                                    scale: 4.0,
+                                  ),
                                   const SizedBox(
                                     width: 5.0,
                                   ),
@@ -272,19 +354,28 @@ class _MainAppState extends State<MainApp> {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width * 0.8,
-                                  child: const IntrinsicHeight(child: FloatingActionBar()),
+                                  child: const IntrinsicHeight(
+                                      child: FloatingActionBar()),
                                 ),
                                 IntrinsicHeight(
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      setState(() => chart == 0 ? (chart = 1) : chart = 0);
+                                      setState(() =>
+                                          chart == 0 ? (chart = 1) : chart = 0);
                                     },
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor: Colors.black,
                                       foregroundColor: Colors.white,
                                     ),
-                                    child: chart == 0 ? Image.asset("assets/images/candlebar.png",
-                                    scale: 3.0,) : Image.asset("assets/images/chart.png",scale: 3.0,),
+                                    child: chart == 0
+                                        ? Image.asset(
+                                            "assets/images/candlebar.png",
+                                            scale: 3.0,
+                                          )
+                                        : Image.asset(
+                                            "assets/images/chart.png",
+                                            scale: 3.0,
+                                          ),
                                   ),
                                 ),
                               ],
@@ -303,9 +394,6 @@ class _MainAppState extends State<MainApp> {
     );
   }
 }
-
-
-
 
 class FloatingActionBar extends StatefulWidget {
   const FloatingActionBar({Key? key}) : super(key: key);
@@ -328,45 +416,40 @@ class _FloatingActionBarState extends State<FloatingActionBar> {
           customWidget: Text(
             "1H",
             style: TextStyle(
-              color: _index == 0 ? Colors.white : const Color(0xff424242),
-              fontSize: 18
-            ),
+                color: _index == 0 ? Colors.white : const Color(0xff424242),
+                fontSize: 18),
           ),
         ),
         FloatingNavbarItem(
           customWidget: Text(
             "1D",
             style: TextStyle(
-              color: _index == 1 ? Colors.white : const Color(0xff424242),
-                fontSize: 18
-            ),
+                color: _index == 1 ? Colors.white : const Color(0xff424242),
+                fontSize: 18),
           ),
         ),
         FloatingNavbarItem(
           customWidget: Text(
             "1W",
             style: TextStyle(
-              color: _index == 2 ? Colors.white : const Color(0xff424242),
-                fontSize: 18
-            ),
+                color: _index == 2 ? Colors.white : const Color(0xff424242),
+                fontSize: 18),
           ),
         ),
         FloatingNavbarItem(
           customWidget: Text(
             "1M",
             style: TextStyle(
-              color: _index == 3 ? Colors.white : const Color(0xff424242),
-                fontSize: 18
-            ),
+                color: _index == 3 ? Colors.white : const Color(0xff424242),
+                fontSize: 18),
           ),
         ),
         FloatingNavbarItem(
           customWidget: Text(
             "5Y",
             style: TextStyle(
-              color: _index == 4 ? Colors.white : const Color(0xff424242),
-                fontSize: 18
-            ),
+                color: _index == 4 ? Colors.white : const Color(0xff424242),
+                fontSize: 18),
           ),
         ),
       ],
