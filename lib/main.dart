@@ -26,10 +26,11 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     _trackball = TrackballBehavior(
       enable: true,
+      hideDelay: 2,
       tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
-      tooltipSettings: const InteractiveTooltip(
+      tooltipSettings: InteractiveTooltip(
         enable: true,
-        color: Colors.amberAccent,
+        color: Colors.blue.shade700,
       ),
     );
     // TODO: implement initState
@@ -93,6 +94,10 @@ class _MainAppState extends State<MainApp> {
                         ),
                         child: SfCartesianChart(
                           trackballBehavior: _trackball,
+                          tooltipBehavior: TooltipBehavior(
+                            enable: true,
+                            color: Colors.blue.shade700,
+                          ),
                           plotAreaBorderWidth: 0,
                           enableAxisAnimation: true,
                           legend: Legend(isVisible: true),
@@ -151,7 +156,7 @@ class _MainAppState extends State<MainApp> {
                             // isVisible: false,
                             autoScrollingMode: AutoScrollingMode.end,
                             labelPosition: ChartDataLabelPosition.inside,
-                            anchorRangeToVisiblePoints: false,
+                            anchorRangeToVisiblePoints: true,
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
                             enableAutoIntervalOnZooming: true,
                             numberFormat: NumberFormat.currency(
@@ -160,8 +165,14 @@ class _MainAppState extends State<MainApp> {
                             ),
                           ),
 
-                          zoomPanBehavior:
-                              ZoomPanBehavior(enablePinching: true),
+                          zoomPanBehavior: ZoomPanBehavior(
+                            enablePinching: true,
+                            enableDoubleTapZooming: true,
+                            enableSelectionZooming: false,
+                            enableMouseWheelZooming: true,
+                            enablePanning: true,
+                            maximumZoomLevel: 0.3,
+                          ),
                           backgroundColor:
                               const Color(0xff111115).withAlpha(180),
                           series: <ChartSeries>[
@@ -297,7 +308,7 @@ class _MainAppState extends State<MainApp> {
                       Positioned(
                         left: 10.0,
                         top: 130,
-                        right: MediaQuery.of(context).size.width*0.2,
+                        right: MediaQuery.of(context).size.width * 0.1,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
@@ -444,10 +455,14 @@ class _MainAppState extends State<MainApp> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                     Text(
+                                    Text(
                                       "Analyst Ratings",
                                       style: TextStyle(
-                                          color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.07),
+                                          color: Colors.white,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.07),
                                     ),
                                     Stack(
                                       alignment: AlignmentDirectional.topEnd,
@@ -539,20 +554,18 @@ class _MainAppState extends State<MainApp> {
                     children: [
                       Container(
                         color: Colors.black,
-                        child: Builder(
-                          builder: (context) {
-                            return Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                buildButton("Strong Buy",context,(){}),
-                                buildButton("Buy",context,(){}),
-                                buildButton("Hold",context,(){}),
-                                buildButton("Sell",context,(){}),
-                                buildButton("Strong Sell",context,(){}),
-                              ],
-                            );
-                          }
-                        ),
+                        child: Builder(builder: (context) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              buildButton("Strong Buy", context, () {}),
+                              buildButton("Buy", context, () {}),
+                              buildButton("Hold", context, () {}),
+                              buildButton("Sell", context, () {}),
+                              buildButton("Strong Sell", context, () {}),
+                            ],
+                          );
+                        }),
                       ),
                       Builder(
                         builder: (context) {
@@ -564,14 +577,14 @@ class _MainAppState extends State<MainApp> {
                                   const EdgeInsets.symmetric(horizontal: 10.0),
                               child: ExpandablePanel(
                                 theme: ExpandableThemeData(
-                                  iconSize: 30,
+                                  iconSize: 25,
                                   iconPlacement:
                                       ExpandablePanelIconPlacement.left,
-                                  iconColor: Colors.white,
+                                  iconColor: Colors.white54,
                                   iconPadding: EdgeInsets.only(
                                       left: MediaQuery.of(context).size.width *
                                               0.4399 -
-                                          18),
+                                          14),
                                 ),
                                 header: const SizedBox(),
                                 collapsed: Container(
@@ -586,21 +599,96 @@ class _MainAppState extends State<MainApp> {
                                     ),
                                   ),
                                 ),
-                                expanded: SizedBox(
-                                  height: 500,
-                                  child: Column(
-                                    children: [
-                                      const Divider(
-                                        thickness: 0.1,
-                                        color: Colors.green,
+                                expanded: Column(
+                                  children: [
+                                    const Divider(
+                                      color: Colors.white54,
+                                      thickness: 0.1,
+                                    ),
+                                    Container(
+                                      color: Colors.black,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: const [
+                                            Text(
+                                              "64%",
+                                              style: TextStyle(
+                                                  fontSize: 60.0,
+                                                  color: Colors.tealAccent),
+                                            ),
+                                            SizedBox(
+                                              width: 10.0,
+                                            ),
+                                            Text(
+                                              "Buy Rating",
+                                              style: TextStyle(
+                                                  color: Colors.tealAccent,
+                                                  fontSize: 35.0),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                      Container(
-                                        height: 400,
-                                        width: double.maxFinite,
-                                        color: Colors.amberAccent,
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                    const Divider(
+                                      color: Colors.white54,
+                                      thickness: 0.1,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0, horizontal: 10.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: const [
+                                              Text(
+                                                "Top Bulls",
+                                                style: TextStyle(
+                                                    color: Colors.white30,
+                                                    fontSize: 18.0),
+                                              ),
+                                              Text(
+                                                "Historical Accuracy",
+                                                style: TextStyle(
+                                                    color: Colors.white30,
+                                                    fontSize: 18.0),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20.0,),
+                                         topBullBearRow("HDFC Asset Mngt. Co", "86%","assets/images/hdfc.png"),
+                                          const SizedBox(height: 10.0,),
+                                          topBullBearRow("Solar Industries", "92%","assets/images/solar.png"),
+                                          const SizedBox(height: 30.0,),
+                                          // const SizedBox(height: 20.0,),
+                                          Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                            children: const [
+                                              Text(
+                                                "Top Bears",
+                                                style: TextStyle(
+                                                    color: Colors.white30,
+                                                    fontSize: 18.0),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20.0,),
+                                          topBullBearRow("United Spirits", "86%","assets/images/united.png"),
+                                          const SizedBox(height: 10.0,),
+                                          topBullBearRow("Home first Finance", "92%","assets/images/hffc.png"),
+                                          const SizedBox(height: 30.0,),
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 ),
                               ),
                             ),
@@ -701,16 +789,53 @@ class _FloatingActionBarState extends State<FloatingActionBar> {
   }
 }
 
-
-Widget buildButton(String text, BuildContext context, VoidCallback function){
+Widget buildButton(String text, BuildContext context, VoidCallback function) {
   return Expanded(
     child: TextButton(
       onPressed: function,
       child: Text(
         text,
         style: TextStyle(
-            color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.05),
+            color: Colors.white,
+            fontSize: MediaQuery.of(context).size.width * 0.05),
       ),
     ),
+  );
+}
+
+
+Widget topBullBearRow(String BullBearName, String Accuracy, String image){
+  return Row(
+    mainAxisAlignment:
+    MainAxisAlignment.spaceBetween,
+    children: [
+      Row(
+        mainAxisAlignment:
+        MainAxisAlignment.spaceEvenly,
+        children: [
+          Image.asset(
+            image,
+            scale: 2.0,
+          ),
+          const SizedBox(
+            width: 5.0,
+          ),
+           Text(
+            BullBearName,
+            style: const TextStyle(
+              fontSize: 18.0,
+              color: Colors.white70,
+            ),
+          ),
+        ],
+      ),
+       Text(
+        Accuracy,
+        style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w300,
+            fontSize: 20.0),
+      ),
+    ],
   );
 }
