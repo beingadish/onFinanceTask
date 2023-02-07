@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 import 'package:on_finance_task/constants/stock_data.dart';
 import 'package:floating_bottom_navigation_bar/floating_bottom_navigation_bar.dart';
 import 'package:on_finance_task/model/data_model.dart';
+import 'package:expandable/expandable.dart';
 
 void main() {
   runApp(const MainApp());
@@ -20,6 +20,21 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   int chart = 0;
   int save = 0;
+  late TrackballBehavior _trackball;
+
+  @override
+  void initState() {
+    _trackball = TrackballBehavior(
+      enable: true,
+      tooltipDisplayMode: TrackballDisplayMode.floatAllPoints,
+      tooltipSettings: const InteractiveTooltip(
+        enable: true,
+        color: Colors.amberAccent,
+      ),
+    );
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,72 +87,83 @@ class _MainAppState extends State<MainApp> {
                         height: MediaQuery.of(context).size.height - 300,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20.0),
-                            bottomRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(40.0),
+                            bottomRight: Radius.circular(40.0),
                           ),
                         ),
                         child: SfCartesianChart(
-                          // isTransposed: true,
-                          // enableSideBySideSeriesPlacement: false,
+                          trackballBehavior: _trackball,
                           plotAreaBorderWidth: 0,
-                          // plotAreaBorderColor: Colors.amber,
                           enableAxisAnimation: true,
-
                           legend: Legend(isVisible: true),
                           margin: const EdgeInsets.all(0),
 
-
+                          // X AXIS (DATE TIME)
                           primaryXAxis: DateTimeAxis(
-                            // isVisible: false,
-                            borderColor: Colors.amber,
-                            // plotOffset: 0,
-                            axisBorderType: AxisBorderType.withoutTopAndBottom,
+                            minorTicksPerInterval: 5,
+                            tickPosition: TickPosition.inside,
+                            majorTickLines: const MajorTickLines(
+                                size: 0, color: Colors.white12),
+                            minorTickLines: const MinorTickLines(
+                                color: Colors.white12, width: 0),
                             majorGridLines: const MajorGridLines(
                               color: Colors.white12,
-                              width: 0.2,
+                              width: 0.3,
                             ),
                             minorGridLines: const MinorGridLines(
                               color: Colors.white,
-                              width: 0.1,
+                              width: 0.03,
                             ),
+                            maximumLabelWidth: 0,
+                            axisLine: const AxisLine(
+                              width: 0,
+                            ),
+                            borderColor: Colors.amber,
+                            axisBorderType: AxisBorderType.withoutTopAndBottom,
                             labelPosition: ChartDataLabelPosition.inside,
-                            tickPosition: TickPosition.inside,
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
                             enableAutoIntervalOnZooming: true,
                             minimum: DateTime(2004, 01, 01),
                             maximum: DateTime(2010, 12, 31),
+                            autoScrollingMode: AutoScrollingMode.end,
                           ),
 
-
                           primaryYAxis: NumericAxis(
-                            // isVisible: false,
-                            autoScrollingMode: AutoScrollingMode.end,
+                            minimum: 11,
+                            maximum: 25,
+                            minorTicksPerInterval: 5,
+                            tickPosition: TickPosition.inside,
+                            majorTickLines: const MajorTickLines(
+                                size: 0, color: Colors.white12),
+                            minorTickLines: const MinorTickLines(
+                                color: Colors.white12, width: 0),
                             majorGridLines: const MajorGridLines(
                               color: Colors.white12,
-                              width: 0.2,
+                              width: 0.3,
                             ),
                             minorGridLines: const MinorGridLines(
                               color: Colors.white,
-                              width: 0.1,
+                              width: 0.03,
                             ),
+                            maximumLabelWidth: 0,
+                            decimalPlaces: 7,
+                            axisLine: const AxisLine(width: 0),
+                            // isVisible: false,
+                            autoScrollingMode: AutoScrollingMode.end,
                             labelPosition: ChartDataLabelPosition.inside,
                             anchorRangeToVisiblePoints: false,
-                            tickPosition: TickPosition.inside,
                             edgeLabelPlacement: EdgeLabelPlacement.shift,
-                            // borderColor: Colors.amber,
                             enableAutoIntervalOnZooming: true,
                             numberFormat: NumberFormat.currency(
                               locale: "en_IND",
                               symbol: "₹",
                             ),
-                            minimum: 13,
-                            maximum: 25,
                           ),
-
 
                           zoomPanBehavior:
                               ZoomPanBehavior(enablePinching: true),
-                          backgroundColor: const Color(0xff111115).withAlpha(180),
+                          backgroundColor:
+                              const Color(0xff111115).withAlpha(180),
                           series: <ChartSeries>[
                             chart == 1
                                 ? CandleSeries<StockData, dynamic>(
@@ -155,7 +181,7 @@ class _MainAppState extends State<MainApp> {
                                     closeValueMapper: (StockData stock, _) =>
                                         stock.close)
                                 : SplineSeries<StockData, dynamic>(
-                              color: const Color(0xff00EB7A),
+                                    color: const Color(0xff00EB7A),
                                     dataSource: chartData,
                                     xValueMapper: (StockData stock, _) =>
                                         stock.time,
@@ -176,8 +202,8 @@ class _MainAppState extends State<MainApp> {
                           ],
                           color: Colors.black,
                           borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(20.0),
-                            bottomRight: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0),
                           ),
                         ),
                         height: 120,
@@ -208,8 +234,8 @@ class _MainAppState extends State<MainApp> {
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
-                                      children: const [
-                                        Text(
+                                      children: [
+                                        const Text(
                                           "₹94.634",
                                           style: TextStyle(
                                             fontSize: 25.0,
@@ -220,7 +246,7 @@ class _MainAppState extends State<MainApp> {
                                           "MATIC",
                                           style: TextStyle(
                                             fontSize: 18.0,
-                                            color: Color(0xff3455FF),
+                                            color: Colors.blue.shade700,
                                           ),
                                         )
                                       ],
@@ -269,55 +295,60 @@ class _MainAppState extends State<MainApp> {
                         ),
                       ),
                       Positioned(
-                        left: 35.0,
+                        left: 10.0,
                         top: 130,
+                        right: MediaQuery.of(context).size.width*0.2,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             // PRICE RATE
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                shadowColor: Colors.black,
-                                backgroundColor: Colors.black,
-                                elevation: 10,
-                              ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                    "assets/images/up.png",
-                                    scale: 4.0,
-                                  ),
-                                  const SizedBox(
-                                    width: 5.0,
-                                  ),
-                                  const Text(
-                                    "2.75%",
-                                    style: TextStyle(
-                                      color: Color(0xff00EB7A),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  shadowColor: Colors.black,
+                                  backgroundColor: Colors.black,
+                                  elevation: 10,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/up.png",
+                                      scale: 4.0,
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(
+                                      width: 5.0,
+                                    ),
+                                    const Text(
+                                      "2.75%",
+                                      style: TextStyle(
+                                        color: Color(0xff00EB7A),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             const SizedBox(
                               width: 15.0,
                             ),
                             // ASCENDING ANGLE
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                backgroundColor: const Color(0xff202027),
-                                elevation: 10.0,
-                              ),
-                              child: const Text(
-                                "Ascending Angle",
-                                style: TextStyle(
-                                  color: Color(0xff98B5FF),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  backgroundColor: const Color(0xff202027),
+                                  elevation: 10.0,
+                                ),
+                                child: const Text(
+                                  "Ascending Angle",
+                                  style: TextStyle(
+                                    color: Color(0xff98B5FF),
+                                  ),
                                 ),
                               ),
                             ),
@@ -325,18 +356,20 @@ class _MainAppState extends State<MainApp> {
                               width: 15.0,
                             ),
                             // HIGH EXPOSURE
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10.0),
-                                backgroundColor: const Color(0xff202027),
-                                elevation: 10.0,
-                              ),
-                              child: const Text(
-                                "High Exposure",
-                                style: TextStyle(
-                                  color: Color(0xffDC3F40),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ElevatedButton.styleFrom(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10.0),
+                                  backgroundColor: const Color(0xff202027),
+                                  elevation: 10.0,
+                                ),
+                                child: const Text(
+                                  "High Exposure",
+                                  style: TextStyle(
+                                    color: Color(0xffDC3F40),
+                                  ),
                                 ),
                               ),
                             ),
@@ -346,46 +379,257 @@ class _MainAppState extends State<MainApp> {
                       Positioned(
                         bottom: 0.0,
                         width: MediaQuery.of(context).size.width,
-                        child: Align(
-                          child: IntrinsicHeight(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  child: const IntrinsicHeight(
-                                      child: FloatingActionBar()),
-                                ),
-                                IntrinsicHeight(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      setState(() =>
-                                          chart == 0 ? (chart = 1) : chart = 0);
-                                    },
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.black,
-                                      foregroundColor: Colors.white,
+                        child: Column(
+                          children: [
+                            Align(
+                              child: IntrinsicHeight(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.8,
+                                      child: const IntrinsicHeight(
+                                          child: FloatingActionBar()),
                                     ),
-                                    child: chart == 0
-                                        ? Image.asset(
-                                            "assets/images/candlebar.png",
-                                            scale: 3.0,
-                                          )
-                                        : Image.asset(
-                                            "assets/images/chart.png",
-                                            scale: 3.0,
-                                          ),
-                                  ),
+                                    IntrinsicHeight(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          setState(() => chart == 0
+                                              ? (chart = 1)
+                                              : chart = 0);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Colors.black,
+                                          foregroundColor: Colors.white,
+                                        ),
+                                        child: chart == 0
+                                            ? Image.asset(
+                                                "assets/images/candlebar.png",
+                                                scale: 3.0,
+                                              )
+                                            : Image.asset(
+                                                "assets/images/chart.png",
+                                                scale: 3.0,
+                                              ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 5.0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 30.0),
+                                height: 80.0,
+                                decoration: const BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(30.0),
+                                    topRight: Radius.circular(30.0),
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.white12,
+                                      blurRadius: 0.5,
+                                      blurStyle: BlurStyle.normal,
+                                    )
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                     Text(
+                                      "Analyst Ratings",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.07),
+                                    ),
+                                    Stack(
+                                      alignment: AlignmentDirectional.topEnd,
+                                      children: [
+                                        SizedBox(
+                                            height: 40,
+                                            width: 40,
+                                            child: Image.asset(
+                                              "assets/images/spark1.png",
+                                              scale: 5.0,
+                                            )),
+                                        Positioned(
+                                          height: 15,
+                                          width: 15,
+                                          child: Image.asset(
+                                            "assets/images/spark2.png",
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ],
                   );
                 },
+              ),
+              Builder(builder: (context) {
+                return Container(
+                  width: double.maxFinite,
+                  decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.white24,
+                        blurRadius: 0.5,
+                        blurStyle: BlurStyle.normal,
+                      )
+                    ],
+                    color: Colors.black,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue.shade700,
+                              minimumSize: Size(
+                                  MediaQuery.of(context).size.width * 0.4, 35)),
+                          child: const Text(
+                            "Buy",
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              minimumSize: Size(
+                                  MediaQuery.of(context).size.width * 0.4, 35)),
+                          onPressed: () {},
+                          child: const Text(
+                            "Sell",
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 20,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                );
+              }),
+              Container(
+                width: double.infinity,
+                color: const Color(0xff111115).withAlpha(180),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0),
+                  child: Column(
+                    children: [
+                      Container(
+                        color: Colors.black,
+                        child: Builder(
+                          builder: (context) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                buildButton("Strong Buy",context,(){}),
+                                buildButton("Buy",context,(){}),
+                                buildButton("Hold",context,(){}),
+                                buildButton("Sell",context,(){}),
+                                buildButton("Strong Sell",context,(){}),
+                              ],
+                            );
+                          }
+                        ),
+                      ),
+                      Builder(
+                        builder: (context) {
+                          return Container(
+                            color: Colors.black,
+                            width: double.infinity,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: ExpandablePanel(
+                                theme: ExpandableThemeData(
+                                  iconSize: 30,
+                                  iconPlacement:
+                                      ExpandablePanelIconPlacement.left,
+                                  iconColor: Colors.white,
+                                  iconPadding: EdgeInsets.only(
+                                      left: MediaQuery.of(context).size.width *
+                                              0.4399 -
+                                          18),
+                                ),
+                                header: const SizedBox(),
+                                collapsed: Container(
+                                  clipBehavior: Clip.antiAlias,
+                                  width: double.infinity,
+                                  height: 1.0,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(50.0),
+                                      bottomLeft: Radius.circular(50.0),
+                                    ),
+                                  ),
+                                ),
+                                expanded: SizedBox(
+                                  height: 500,
+                                  child: Column(
+                                    children: [
+                                      const Divider(
+                                        thickness: 0.1,
+                                        color: Colors.green,
+                                      ),
+                                      Container(
+                                        height: 400,
+                                        width: double.maxFinite,
+                                        color: Colors.amberAccent,
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      Builder(
+                        builder: (context) {
+                          return Center(
+                            child: Container(
+                              height: 5.0,
+                              width: MediaQuery.of(context).size.width * 0.3,
+                              decoration: const BoxDecoration(
+                                color: Colors.tealAccent,
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(40.0),
+                                  bottomRight: Radius.circular(40.0),
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(
+                        height: 50.0,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -408,7 +652,7 @@ class _FloatingActionBarState extends State<FloatingActionBar> {
   @override
   Widget build(BuildContext context) {
     return FloatingNavbar(
-      selectedBackgroundColor: const Color(0xff3353FA),
+      selectedBackgroundColor: Colors.blue.shade700,
       onTap: (int val) => setState(() => _index = val),
       currentIndex: _index,
       items: [
@@ -455,4 +699,18 @@ class _FloatingActionBarState extends State<FloatingActionBar> {
       ],
     );
   }
+}
+
+
+Widget buildButton(String text, BuildContext context, VoidCallback function){
+  return Expanded(
+    child: TextButton(
+      onPressed: function,
+      child: Text(
+        text,
+        style: TextStyle(
+            color: Colors.white, fontSize: MediaQuery.of(context).size.width*0.05),
+      ),
+    ),
+  );
 }

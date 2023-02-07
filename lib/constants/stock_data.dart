@@ -1,16 +1,10 @@
 import '../model/data_model.dart';
 
 List<StockData> chartData = [
+
   StockData(DateTime(2005, 01, 05), 17.83, 18.79, 17.78, 18.37),
-  // StockData(DateTime(2005, 01, 15), 23.5, 25.5, 31.2, 22.9),
-  // StockData(DateTime(2005, 01, 25), 28.5, 26.3, 52.1, 18.2),
-  // StockData(DateTime(2005, 02, 5), 28.5, 26.3, 52.1, 18.2),
   StockData(DateTime(2005, 02, 12), 17.74, 17.76, 17.27, 17.48),
-  // StockData(DateTime(2005, 02, 15), 28.5, 26.3, 52.1, 18.2),
-  // StockData(DateTime(2005, 02, 25), 28.5, 26.3, 52.1, 18.2),
-  // StockData(DateTime(2005, 03, 5), 28.5, 26.3, 52.1, 18.2),
   StockData(DateTime(2005, 03, 14), 17.01, 17.04, 16.48, 17.01),
-  // StockData(DateTime(2005, 03, 25), 28.5, 26.3, 52.1, 18.2),
   StockData(DateTime(2005, 04, 16), 16.63, 17.2, 16.43, 17.11),
   StockData(DateTime(2005, 05, 17), 15.37, 16.62, 15.25, 16.48),
   StockData(DateTime(2005, 06, 15), 15.2, 15.74, 15.1, 15.15),
@@ -22,7 +16,6 @@ List<StockData> chartData = [
   StockData(DateTime(2005, 12, 31), 18.04, 18.21, 17.84, 17.93),
 
   StockData(DateTime(2006, 01, 19), 17.37, 18.59, 17.31, 18.33),
-  // StockData(DateTime(2006, 01, 25), 28.5, 26.3, 52.1, 18.2),
   StockData(DateTime(2006, 02, 15), 17.32, 17.65, 16.88, 17.06),
   StockData(DateTime(2006, 03, 11), 17.37, 17.45, 16.92, 17.14),
   StockData(DateTime(2006, 04, 22), 17.03, 17.22, 16.6, 16.96),
@@ -34,14 +27,12 @@ List<StockData> chartData = [
   StockData(DateTime(2006, 10, 02), 15.96, 16.25, 15.72, 15.79),
   StockData(DateTime(2006, 11, 18), 16.29, 16.52, 16.1, 16.15),
   StockData(DateTime(2006, 12, 03), 17.05, 17.08, 16.42, 16.42),
-  // StockData(DateTime(2006, 12, 25), 28.5, 26.3, 52.1, 18.2),
 
   StockData(DateTime(2007, 01, 05), 17.01, 17.24, 16.46, 16.96),
   StockData(DateTime(2007, 02, 06), 17.03, 17.35, 16.36, 17.17),
   StockData(DateTime(2007, 03, 07), 18.02, 18.15, 17.16, 17.21),
   StockData(DateTime(2007, 04, 12), 17.77, 18.19, 17.66, 18),
   StockData(DateTime(2007, 05, 15), 18.3, 18.38, 17.81, 17.91),
-  // StockData(DateTime(2007, 05, 16), 28.5, 26.3, 52.1, 18.2),
   StockData(DateTime(2007, 06, 15), 18.22, 18.45, 18, 18.12),
   StockData(DateTime(2007, 07, 15), 18.49, 18.5, 17.89, 18.09),
   StockData(DateTime(2007, 08, 17), 19.27, 19.47, 19.04, 19.09),
@@ -55,7 +46,6 @@ List<StockData> chartData = [
   StockData(DateTime(2008, 03, 25), 18.54, 19, 18.5, 18.63),
   StockData(DateTime(2008, 04, 15), 17.85, 18.61, 17.6, 18.5),
   StockData(DateTime(2008, 05, 22), 17.03, 18.13, 17, 17.83),
-  // StockData(DateTime(2008, 06, 09), 28.5, 26.3, 52.1, 18.2),
   StockData(DateTime(2008, 06, 27), 17.74, 17.79, 17.1, 17.1),
   StockData(DateTime(2008, 07, 26), 17.78, 17.96, 17.56, 17.59),
   StockData(DateTime(2008, 08, 15), 17.8, 18.31, 17.76, 18.04),
@@ -77,5 +67,6 @@ List<StockData> chartData = [
   StockData(DateTime(2009, 11, 17), 20.75, 21, 20.61, 20.76),
   StockData(DateTime(2009, 12, 22), 20.2, 20.67, 20.06, 20.52),
 
-  StockData(DateTime(2010, 01, 16), 19.53, 20.4, 19.37, 20.33)
+  StockData(DateTime(2010, 01, 16), 19.53, 20.4, 19.37, 20.33),
+
 ];
