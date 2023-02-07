@@ -85,7 +85,7 @@ class _MainAppState extends State<MainApp> {
                     children: [
                       Container(
                         clipBehavior: Clip.antiAlias,
-                        height: MediaQuery.of(context).size.height - 300,
+                        height: MediaQuery.of(context).size.height - 150,
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(40.0),
@@ -459,10 +459,11 @@ class _MainAppState extends State<MainApp> {
                                       "Analyst Ratings",
                                       style: TextStyle(
                                           color: Colors.white,
+                                          fontWeight: FontWeight.w400,
                                           fontSize: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.07),
+                                              0.06),
                                     ),
                                     Stack(
                                       alignment: AlignmentDirectional.topEnd,
@@ -521,8 +522,9 @@ class _MainAppState extends State<MainApp> {
                           child: const Text(
                             "Buy",
                             style: TextStyle(
+                              fontWeight: FontWeight.w400,
                               color: Colors.white,
-                              fontSize: 20,
+                              fontSize: 17,
                             ),
                           ),
                         ),
@@ -535,8 +537,9 @@ class _MainAppState extends State<MainApp> {
                           child: const Text(
                             "Sell",
                             style: TextStyle(
+                              fontWeight: FontWeight.w400,
                               color: Colors.black,
-                              fontSize: 20,
+                              fontSize: 17,
                             ),
                           ),
                         )
@@ -556,7 +559,7 @@ class _MainAppState extends State<MainApp> {
                         color: Colors.black,
                         child: Builder(builder: (context) {
                           return Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               buildButton("Strong Buy", context, () {}),
                               buildButton("Buy", context, () {}),
@@ -619,7 +622,8 @@ class _MainAppState extends State<MainApp> {
                                             Text(
                                               "64%",
                                               style: TextStyle(
-                                                  fontSize: 60.0,
+                                                  fontSize: 45.0,
+                                                  fontWeight: FontWeight.w300,
                                                   color: Colors.tealAccent),
                                             ),
                                             SizedBox(
@@ -629,7 +633,8 @@ class _MainAppState extends State<MainApp> {
                                               "Buy Rating",
                                               style: TextStyle(
                                                   color: Colors.tealAccent,
-                                                  fontSize: 35.0),
+                                                  fontWeight: FontWeight.w400,
+                                                  fontSize: 25.0),
                                             ),
                                           ],
                                         ),
@@ -791,13 +796,18 @@ class _FloatingActionBarState extends State<FloatingActionBar> {
 
 Widget buildButton(String text, BuildContext context, VoidCallback function) {
   return Expanded(
+
     child: TextButton(
+      style: TextButton.styleFrom(
+        fixedSize: const Size(100, 40),
+      ),
       onPressed: function,
       child: Text(
         text,
         style: TextStyle(
             color: Colors.white,
-            fontSize: MediaQuery.of(context).size.width * 0.05),
+            fontWeight: FontWeight.w400,
+            fontSize: MediaQuery.of(context).size.width * 0.04),
       ),
     ),
   );
